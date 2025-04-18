@@ -1,8 +1,9 @@
 import React from 'react'
 import { Routes, Route } from 'react-router-dom'
 import Body from './Body'
-import Login from './auth/login'
-import Feed from './Feed'
+import Login from '../pages/Login'
+import Feed from '../pages/Feed'
+import Profile from '../pages/Profile'
 
 const AppRoutes = () => {
   return (
@@ -10,7 +11,7 @@ const AppRoutes = () => {
           <Route path="/" element={<Body />}>
               <Route path='/' element={<Feed/>} />
               <Route path="/login" element={<Login/>} />
-              <Route path="/profile" element={<div>Profile Page</div>} />
+              <Route path="/profile" element={<Profile/>} />
           </Route>
       </Routes>
   )

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { LoginService } from "../../services/Login.Service";
+import { LoginService } from "../services/Login.Service.js";
 import { useDispatch } from "react-redux";
-import { addUser } from "../../utils/userSlice.js";
+import { addUser } from "../utils/userSlice.js";
 import { useNavigate } from "react-router-dom";
 
 const Login = () => {

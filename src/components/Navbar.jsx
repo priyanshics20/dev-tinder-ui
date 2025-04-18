@@ -1,9 +1,25 @@
 import React from 'react'
-import { useSelector } from 'react-redux'
-import { Link } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
+import { Link, useNavigate } from 'react-router-dom'
+import LogoutService from '../services/Logout.Service'
+import { removeUser } from '../utils/userSlice'
+import toast from 'react-hot-toast'
 
 const Navbar = () => {
     const user = useSelector(store => store.user)
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+
+    const handleLogout = async () => {
+        try {
+            await LogoutService();
+            dispatch(removeUser());
+            navigate("/login")
+            toast.success("Loggedout successfully");
+        } catch (err) {
+            toast.error(err.response.data);
+        }
+    }
     return (
         <div className="navbar bg-base-100 shadow-sm">
             <div className="flex-1">
@@ -34,10 +50,10 @@ const Navbar = () => {
                                 </Link>
                             </li>
                             <li>
-                                <a>Settings</a>
+                                <a>Connections</a>
                             </li>
                             <li>
-                                <a>Logout</a>
+                                <a onClick={handleLogout}>Logout</a>
                             </li>
                         </ul>
                     </div>
