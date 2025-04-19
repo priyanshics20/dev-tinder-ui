@@ -42,7 +42,7 @@ export const Connections = () => {
                 <div>
                   <img
                     alt="photo"
-                    className="w-20 h-20 rounded-full"
+                    className="w-20 h-20 rounded-full object-cover"
                     src={photoURL}
                   />
                 </div>

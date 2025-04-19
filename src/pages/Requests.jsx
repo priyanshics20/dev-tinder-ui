@@ -3,7 +3,7 @@ import React, { useEffect } from 'react'
 import { BASE_URL } from '../utils/constants'
 import { useDispatch, useSelector } from 'react-redux'
 import toast from 'react-hot-toast'
-import { addRequests } from '../utils/requestSlice'
+import { addRequests, removeRequest } from '../utils/requestSlice'
 
 const Requests = () => {
     const dispatch = useDispatch();
@@ -13,6 +13,16 @@ const Requests = () => {
         try {
             const res = await axios.get(BASE_URL + "/user/requests/recieved", { withCredentials: true })
             dispatch(addRequests(res?.data?.data));
+        }
+        catch (err) {
+            toast.error(err?.response?.data);
+        }
+    }
+
+    const handleReviewRequest = async (status , _id) => {
+        try {
+            const res = await axios.post(BASE_URL + "/request/review/" + status + "/" + _id, {}, { withCredentials: true });
+            dispatch(removeRequest(_id));
         }
         catch (err) {
             toast.error(err?.response?.data);
@@ -40,7 +50,7 @@ const Requests = () => {
                 <div>
                   <img
                     alt="photo"
-                    className="w-20 h-20 rounded-full"
+                    className="w-20 h-20 rounded-full object-cover"
                     src={photoURL}
                   />
                 </div>
@@ -52,8 +62,8 @@ const Requests = () => {
                   <p>{about}</p>
                 </div>
                 <div>
-                  <button className="btn btn-primary mx-2 my-2 w-1/2">Reject</button>
-                  <button className="btn btn-secondary mx-2 w-1/2">Accept</button>
+                  <button className="btn btn-primary mx-2 my-2 w-1/2" onClick={()=>handleReviewRequest("rejected",request._id)}>Reject</button>
+                  <button className="btn btn-secondary mx-2 w-1/2" onClick={()=>handleReviewRequest("accepted",request._id)}>Accept</button>
                 </div>
               </div>
             );
