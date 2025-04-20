@@ -1,7 +1,23 @@
+import axios from 'axios';
 import React from 'react'
+import toast from 'react-hot-toast';
+import { BASE_URL } from '../utils/constants';
+import { useDispatch } from 'react-redux';
+import { removeUserFromFeed } from '../utils/feedSlice';
 
 const UserCard = ({ user }) => {
-  const { about, firstName, gender, lastName, photoURL, skills, age } = user;
+  const { _id, about, firstName, gender, lastName, photoURL, skills, age } = user;
+  const dispatch = useDispatch();
+
+  const handleSendRequest = async (status, userId) => {
+    try {
+      const res = await axios.post(BASE_URL + "/request/send/" + status + "/" + userId, {}, { withCredentials: true });
+      dispatch(removeUserFromFeed(userId));
+    } catch (err) {
+      toast.error(err?.response?.data);
+    } 
+  }
+
   return ( 
     <div className="card bg-base-100 w-96 shadow-sm my-4 py-4">
       <figure>
@@ -29,8 +45,8 @@ const UserCard = ({ user }) => {
             </div>
         )}
         <div className="card-actions justify-center">
-        <button className="btn btn-primary">Ingonre</button>
-          <button className="btn btn-secondary">Interested</button>
+        <button className="btn btn-primary" onClick={()=>handleSendRequest( "ignored", _id )}>Ingonre</button>
+          <button className="btn btn-secondary" onClick={()=>handleSendRequest( "interested", _id )}>Interested</button>
         </div>
       </div>
     </div>
