@@ -4,16 +4,18 @@ import toast from "react-hot-toast";
 
 const ProfileEdit = async ({ firstName, lastName, photoURL, age, gender, about, skills }) => {
     try {
-        const body = {
-            firstName,
-            lastName,
-            photoURL,
-            age: parseInt(age),
-            gender,
-            about,
-            skills
-        }
-        console.log(body, "body")
+        const buildRequestBody = (data) => {
+            const result = {};
+            Object.keys(data).forEach((key) => {
+                const value = data[key];
+                if (value !== undefined && value !== null && value !== "") {
+                    result[key] = key === "age" ? parseInt(value) : value;
+                }
+            });
+            return result;
+        };
+
+        const body = buildRequestBody({ firstName, lastName, photoURL, age, gender, about, skills });
         const res =await axios.put(BASE_URL + "/profile/edit", body, { withCredentials: true });
         console.log("profile service", res)
         toast.success("Profile Updated Successfully");
